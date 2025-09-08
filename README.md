@@ -26,36 +26,33 @@
 
 ## 📂 Repository Structure
 
+```txt
 contracts/
-├─ MiningRigOwnership.sol
-└─ ReentrantMock.sol
+ ├─ MiningRigOwnership.sol
+ └─ ReentrantMock.sol
 scripts/
-├─ buy-shares.js
-├─ check-signers.js
-├─ claim-rewards.js
-├─ deploy.js
-├─ deposit-rewards.js
-├─ register-example.js
-└─ transfer-shares.js
+ ├─ buy-shares.js
+ ├─ check-signers.js
+ ├─ claim-rewards.js
+ ├─ deploy.js
+ ├─ deposit-rewards.js
+ ├─ register-example.js
+ └─ transfer-shares.js
 test/
-├─ miningRigOwnership.test.js
-└─ reentrantMock.test.js
+ ├─ miningRigOwnership.test.js
+ └─ reentrantMock.test.js
 screenshots/
-├─ arbiscan_transactions.PNG
-├─ deployment_1.PNG
-├─ deployment_2.PNG
-├─ tests_1.PNG
-└─ tests_2.PNG
+ ├─ arbiscan_transactions.PNG
+ ├─ deployment_1.PNG
+ ├─ deployment_2.PNG
+ ├─ tests_1.PNG
+ └─ tests_2.PNG
 .gitignore
 README.md
 hardhat.config.js
 package.json
 package-lock.json
 
-yaml
-Copy code
-
----
 
 ## ⚙️ Prerequisites
 
