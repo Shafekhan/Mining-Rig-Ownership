@@ -1,28 +1,203 @@
-# MiningRigOwnership
+MiningRigOwnership — Fractional Mining-Rig Ownership (ERC-1155)
+📌 Overview
 
-ERC-1155 based fractional ownership for mining rigs with pro-rata ETH reward distribution.
+MiningRigOwnership is an ERC-1155–based Solidity contract enabling fractional ownership of mining rigs.
 
-## Quickstart
+Rig owners can tokenize rigs into fractional shares.
 
-1. `cp .env.example .env` and fill values
-2. `npm ci`
-3. `npx hardhat compile`
-4. `npx hardhat test`
+Users can buy shares (ERC-1155 tokens).
 
-## Design
-- One `tokenId` per rig.
-- `registerRig(rigId, totalShares, sharePrice)` owner-only.
-- `buyShares(rigId, amount)` payable mints shares to buyer.
-- `depositRewards(rigId)` owner-only payable to add ETH rewards.
-- `claimRewards(rigId)` users withdraw their pro-rata share.
-- Accounting implemented with `accRewardPerShare` scaled by 1e18 and per-user `rewardDebt` + `pendingRewards`.
+Owners can deposit ETH rewards.
 
-## Security
-- Uses OpenZeppelin, `ReentrancyGuard`, checks-effects-interactions, and `Ownable` for admin functions.
+Shareholders can claim pro-rata rewards.
 
-## Deployment (Arbitrum Sepolia)
-Set `ARBITRUM_SEPOLIA_RPC_URL` and `DEPLOYER_PRIVATE_KEY` in `.env`, then:
+The project leverages OpenZeppelin primitives (ERC1155, Ownable, ReentrancyGuard) and includes reentrancy protection.
+It also provides scripts and tests for deployment, interaction, and security validation.
 
-```bash
+✨ Features
+
+Register rigs with a fixed total of fractional shares (registerRig)
+
+Buy shares via buyShares (enforced cap: cannot exceed total supply)
+
+Deposit ETH rewards for a rig (depositRewards)
+
+Claim rewards proportionally to owned shares (claimRewards)
+
+ERC-1155 transfers supported (safeTransferFrom) for secondary share transfers
+
+Reentrancy protection with negative tests (ReentrantMock.sol)
+
+📂 Repository Structure
+contracts/
+ ├─ MiningRigOwnership.sol
+ └─ ReentrantMock.sol
+scripts/
+ ├─ buy-shares.js
+ ├─ check-signers.js
+ ├─ claim-rewards.js
+ ├─ deploy.js
+ ├─ deposit-rewards.js
+ ├─ register-example.js
+ └─ transfer-shares.js
+test/
+ ├─ miningRigOwnership.test.js
+ └─ reentrantMock.test.js
+screenshots/
+ ├─ arbiscan_transactions.PNG
+ ├─ deployment_1.PNG
+ ├─ deployment_2.PNG
+ ├─ tests_1.PNG
+ └─ tests_2.PNG
+.gitignore
+README.md
+hardhat.config.js
+package.json
+package-lock.json
+
+⚙️ Prerequisites
+
+Node.js 20.x LTS (recommended)
+
+npm >= 9
+
+Hardhat
+
+ethers.js v6
+
+🔑 Environment Setup
+
+Create a .env file in the repo root (⚠️ never commit secrets).
+
+Example:
+
+# RPC URL for Arbitrum Sepolia
+ARBITRUM_SEPOLIA_RPC_URL=https://arb-sepolia.g.alchemy.com/v2/<YOUR_ALCHEMY_KEY>
+
+# Owner / deployer private key (DO NOT COMMIT)
+DEPLOYER_PRIVATE_KEY=0x<your_deployer_private_key>
+
+# Optional: multiple comma-separated private keys for testing
+PRIVATE_KEYS=0x<key1>,0x<key2>
+
+# Contract address (fill after deployment)
+MINING_ADDRESS=
+
+
+➡️ Example safe template is provided in .env.example.
+
+🛠️ Hardhat Config Notes
+
+Multiple signers are supported via PRIVATE_KEYS in .env. Example snippet:
+
+const privStr = process.env.PRIVATE_KEYS || "";
+const accounts = privStr.length
+  ? privStr.split(",").map(k => k.trim()).filter(Boolean).map(k => k.startsWith("0x") ? k : `0x${k}`)
+  : (process.env.DEPLOYER_PRIVATE_KEY ? [process.env.DEPLOYER_PRIVATE_KEY] : []);
+
+module.exports = {
+  solidity: "0.8.20",
+  networks: {
+    "arbitrum-sepolia": {
+      url: process.env.ARBITRUM_SEPOLIA_RPC_URL || "",
+      accounts,
+    },
+  },
+};
+
+🚀 Install & Compile
+# install dependencies
+npm ci
+
+# compile contracts
+npx hardhat compile
+
+📤 Deploy
+
+To deploy on localhost:
+
+npx hardhat run scripts/deploy.js --network localhost
+
+
+To deploy on Arbitrum Sepolia:
+
 npx hardhat run --network arbitrum-sepolia scripts/deploy.js
-```
+
+
+✅ Example deployed contract:
+
+MINING_ADDRESS=0x8178e1452199134Cee79d06C1691B9d5fd088508
+
+📜 Scripts — Interact with Contract
+
+All scripts require MINING_ADDRESS set in .env.
+
+1. Register a Rig
+npx hardhat run scripts/register-example.js --network arbitrum-sepolia
+
+2. Buy Shares
+$env:BUYER_INDEX="1"; $env:RIG_ID="1"; $env:AMOUNT="2"
+npx hardhat run --network localhost scripts/buy-shares.js
+
+3. Deposit Rewards
+$env:OWNER_INDEX="0"; $env:RIG_ID="1"; $env:AMOUNT="0.5"
+npx hardhat run --network localhost scripts/deposit-rewards.js
+
+4. Claim Rewards
+$env:CLAIMER_INDEX="1"; $env:RIG_ID="1"
+npx hardhat run --network localhost scripts/claim-rewards.js
+
+5. Transfer Shares
+$env:FROM_INDEX="1"; $env:TO_INDEX="0"; $env:RIG_ID="1"; $env:AMOUNT="1"
+npx hardhat run --network localhost scripts/transfer-shares.js
+
+6. Check Signers
+npx hardhat run --network arbitrum-sepolia scripts/check-signers.js
+
+🧪 Tests
+
+Run tests on local Hardhat network:
+
+npx hardhat test
+
+
+Check coverage:
+
+npx hardhat coverage
+
+
+Tests include:
+
+Rig registration
+
+Buying shares & oversell protection
+
+Deposit & claim logic
+
+Reentrancy attack prevention (ReentrantMock)
+
+Screenshots of results are available in /screenshots.
+
+📸 Screenshots
+
+Localhost deployment ✅
+
+Test results ✅
+
+Arbiscan transaction history ✅
+
+(See /screenshots folder in repo.)
+
+🔒 Security Notes
+
+Do not commit .env or private keys.
+
+Use test wallets for development.
+
+Consider a secrets manager (GitHub Actions, Docker, Vault) for CI/CD.
+
+📜 License
+
+This project is licensed under the MIT License.
+See LICENSE
+ for details.
