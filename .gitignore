@@ -1,0 +1,22 @@
+# Node dependencies
+node_modules/
+
+# Hardhat cache & artifacts
+cache/
+artifacts/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# VS Code settings
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Coverage reports
+coverage/
+coverage.json
