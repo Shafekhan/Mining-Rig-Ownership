@@ -1,4 +1,4 @@
-# MiningRigOwnership Fractional Mining-Rig Ownership (ERC-1155)
+# Fractional Mining-Rig Ownership (ERC-1155)
 
 ## 📌 Overview
 
@@ -15,13 +15,26 @@
 
 ## ✨ Features
 
-- **Register rigs** with a fixed total of fractional shares (`registerRig`)  
-- **Buy shares** via `buyShares` (enforced cap: cannot exceed total supply)  
-- **Deposit ETH rewards** for a rig (`depositRewards`)  
-- **Claim rewards** proportionally to owned shares (`claimRewards`)  
-- **ERC-1155 transfers supported** (`safeTransferFrom`) for secondary share transfers  
+- **Rig Registration** Owner registers rigs with total shares & share price.  
+- **Share Purchase** Users buy shares by paying `amount × sharePrice`.  
+- **Reward Distribution** ETH deposited by the owner is distributed proportionally using `accRewardPerShare`.  
+- **Reward Claim** Shareholders can claim accumulated ETH rewards anytime.  
+- **Transfer Safety** Internal accounting ensures rewards remain accurate across minting, burning, and transfers.  
 - **Reentrancy protection** with negative tests (`ReentrantMock.sol`)  
 
+---
+
+## Flow
+- 1. **Register Rig** → Owner sets total shares & price.
+- 2. **Buy Shares** → Users purchase fractional ownership.
+- 3. **Deposit Rewards** → Owner deposits ETH to distribute.
+- 4. **Claim Rewards** → Users claim their share of ETH.
+---
+
+## Security
+- **ReentrancyGuard** prevents reentrancy attacks.
+- **Accrual System** ensures fair pro-rata reward distribution.
+- **Safe Transfers** maintain accounting correctness.
 ---
 
 ## 📂 Repository Structure
