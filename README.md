@@ -26,7 +26,7 @@
 
 ## 📂 Repository Structure
 
-```txt
+```bash
 contracts/
  ├─ MiningRigOwnership.sol
  └─ ReentrantMock.sol
@@ -52,7 +52,8 @@ README.md
 hardhat.config.js
 package.json
 package-lock.json
-
+```
+---
 
 ## ⚙️ Prerequisites
 
@@ -65,11 +66,11 @@ package-lock.json
 
 ## 🔑 Environment Setup
 
-Create a `.env` file in the repo root (**⚠️ never commit secrets**).
+Create a `.env` file in the repo root
 
 Example:
 
-```ini
+```bash
 # RPC URL for Arbitrum Sepolia
 ARBITRUM_SEPOLIA_RPC_URL=https://arb-sepolia.g.alchemy.com/v2/<YOUR_ALCHEMY_KEY>
 
@@ -81,115 +82,102 @@ PRIVATE_KEYS=0x<key1>,0x<key2>
 
 # Contract address (fill after deployment)
 MINING_ADDRESS=
-➡️ A safe template is provided in .env.example.
+➡️ 
+```
+---
 
-🛠️ Hardhat Config Notes
-Multiple signers are supported via PRIVATE_KEYS in .env.
+## 🚀 Install & Compile
 
-js
-Copy code
-const privStr = process.env.PRIVATE_KEYS || "";
-const accounts = privStr.length
-  ? privStr.split(",").map(k => k.trim()).filter(Boolean).map(k => k.startsWith("0x") ? k : `0x${k}`)
-  : (process.env.DEPLOYER_PRIVATE_KEY ? [process.env.DEPLOYER_PRIVATE_KEY] : []);
-
-module.exports = {
-  solidity: "0.8.20",
-  networks: {
-    "arbitrum-sepolia": {
-      url: process.env.ARBITRUM_SEPOLIA_RPC_URL || "",
-      accounts,
-    },
-  },
-};
-🚀 Install & Compile
-bash
-Copy code
+```bash
 # install dependencies
-npm ci
+npm install
 
 # compile contracts
 npx hardhat compile
-📤 Deploy
-Localhost:
+```
+---
 
-bash
-Copy code
+## 📤 Deploy
+**Localhost:**
+
+```bash
 npx hardhat run scripts/deploy.js --network localhost
-Arbitrum Sepolia:
-
-bash
-Copy code
+```
+**Arbitrum Sepolia:**
+```bash
 npx hardhat run --network arbitrum-sepolia scripts/deploy.js
+```
+
 ✅ Example deployed contract:
+```ini
+MINING_ADDRESS=0xabcde1452199134Cee79d06C1691B9d5fdxxyyzz
+```
+---
 
-ini
-Copy code
-MINING_ADDRESS=0x8178e1452199134Cee79d06C1691B9d5fd088508
-📜 Scripts — Interact with Contract
-All scripts require MINING_ADDRESS set in .env.
+## 📜 Scripts — Interact with Contract
+All scripts require **MINING_ADDRESS** set in **.env.**
 
-Register a Rig
+**1.Register a Rig**
+```bash
+npx hardhat run scripts/register-example.js --network localhost
+```
 
-bash
-Copy code
-npx hardhat run scripts/register-example.js --network arbitrum-sepolia
-Buy Shares
-
-powershell
-Copy code
+**2.Buy Shares**
+```bash
 $env:BUYER_INDEX="1"; $env:RIG_ID="1"; $env:AMOUNT="2"
 npx hardhat run --network localhost scripts/buy-shares.js
-Deposit Rewards
+```
 
-powershell
-Copy code
+**3.Deposit Rewards**
+```bash
 $env:OWNER_INDEX="0"; $env:RIG_ID="1"; $env:AMOUNT="0.5"
 npx hardhat run --network localhost scripts/deposit-rewards.js
-Claim Rewards
+```
 
-powershell
-Copy code
+**4.Claim Rewards**
+```bash
 $env:CLAIMER_INDEX="1"; $env:RIG_ID="1"
 npx hardhat run --network localhost scripts/claim-rewards.js
-Transfer Shares
+```
 
-powershell
-Copy code
+**5.Transfer Shares**
+```bash
 $env:FROM_INDEX="1"; $env:TO_INDEX="0"; $env:RIG_ID="1"; $env:AMOUNT="1"
 npx hardhat run --network localhost scripts/transfer-shares.js
-Check Signers
+```
 
-bash
-Copy code
+**6.Check Signers**
+```bash
 npx hardhat run --network arbitrum-sepolia scripts/check-signers.js
-🧪 Tests
+```
+---
+
+## 🧪 Tests
 Run tests on a local Hardhat network:
-
-bash
-Copy code
+```bash
 npx hardhat test
+```
+
 Check coverage:
-
-bash
-Copy code
+```bash
 npx hardhat coverage
-Tests include:
-Rig registration
+```
 
-Buying shares & oversell protection
+**Tests include:**
+- Rig registration
 
-Deposit & claim logic
+- Buying shares & oversell protection
 
-Reentrancy attack prevention (ReentrantMock)
+- Deposit & claim logic
 
-📸 Screenshots of results are available in /screenshots.
+- Reentrancy attack prevention (ReentrantMock)
+---
 
-📸 Screenshots
-✅ Localhost deployment
+## 📸 Screenshots
+- ✅ Localhost deployment
 
-✅ Test results
+- ✅ Test results
 
-✅ Arbiscan transaction history
+- ✅ Arbiscan transaction history
 
 (See /screenshots folder in repo.)
