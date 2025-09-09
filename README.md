@@ -1,4 +1,4 @@
-# MiningRigOwnership — Fractional Mining-Rig Ownership (ERC-1155)
+# MiningRigOwnership Fractional Mining-Rig Ownership (ERC-1155)
 
 ## 📌 Overview
 
@@ -115,7 +115,7 @@ MINING_ADDRESS=0xabcde1452199134Cee79d06C1691B9d5fdxxyyzz
 ---
 
 ## 📜 Scripts — Interact with Contract
-All scripts require **MINING_ADDRESS** set in **.env.**
+All scripts require **MINING_ADDRESS** set in `.env`.
 
 **1.Register a Rig**
 ```bash
@@ -181,3 +181,4 @@ npx hardhat coverage
 - ✅ Arbiscan transaction history
 
 (See /screenshots folder in repo.)
+---
